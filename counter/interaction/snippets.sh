@@ -1,8 +1,8 @@
 PEM_FILE="../../../wallet/wallet-owner.pem"
 COUNTER_CONTRACT="output/counter.wasm"
 
-PROXY_ARGUMENT="--proxy=https://devnet-api.elrond.com"
-CHAIN_ARGUMENT="--chain=D"
+PROXY="https://devnet-gateway.elrond.com"
+CHAIN="D"
 
 
 build_counter() {
@@ -14,7 +14,7 @@ deploy_counter() {
           --metadata-payable \
           --pem=${PEM_FILE} \
           --gas-limit=150000000 \
-          --proxy=${PROXY} --chain=${CHAIN_ID} \
+          --proxy=${PROXY} --chain=${CHAIN} \
           --outfile="deploy-testnet.interaction.json" --send --wait-result
     
     ADDRESS=$(erdpy data parse --file="deploy-testnet.interaction.json" --expression="data['emitted_tx']['address']")
@@ -25,7 +25,19 @@ deploy_counter() {
     echo "Faucet Smart contract address: ${ADDRESS}"
 }
 
-number_to_u64() {
-    local NUMBER=$1
-    printf "%016x" $NUMBER
+COUNTER_ADDRESS="erd1qqqqqqqqqqqqqpgq5ktw90nxeptv6nnqs5wysuc7tvqnux2ldynsrd70yk"
+
+increment() {
+    erdpy --verbose contract call ${COUNTER_ADDRESS} --recall-nonce \
+          --pem=${PEM_FILE} \
+          --gas-limit=200000000 \
+          --proxy=${PROXY} --chain=${CHAIN} \
+          --function=increment \
+          --send || return
+}
+
+get_value() {
+    erdpy --verbose contract query ${COUNTER_ADDRESS} \
+        --proxy=${PROXY} \
+        --function=getValue || return
 }

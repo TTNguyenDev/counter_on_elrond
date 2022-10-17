@@ -6,25 +6,25 @@ elrond_wasm::imports!();
 pub trait Counter {
     #[init]
     fn init(&self) {
-        self.count().set(BigInt::zero());
+        self.count().set(&BigInt::zero());
     }
 
     // endpoints
     #[endpoint]
     fn increment(&self) {
         let count_val = self.count().get();
-        self.count().set(count_val + BigInt::from(1));
+        self.count().set(&(count_val + BigInt::from(1)));
     }
 
     #[endpoint]
     fn decrement(&self) {
         let count_val = self.count().get();
-        self.count().set(count_val - BigInt::from(1));
+        self.count().set(&(count_val - BigInt::from(1)));
     }
 
     #[endpoint]
     fn reset(&self) {
-        self.count().set(BigInt::zero());
+        self.count().set(&BigInt::zero());
     }
 
     // views
