@@ -1,0 +1,15 @@
+[package]
+name = "counter-meta"
+version = "0.0.0"
+authors = [ "Bruda Claudiu-Marcel <claudiu725@yahoo.com>",]
+edition = "2018"
+publish = false
+
+[dependencies.counter]
+path = ".."
+
+[dependencies.elrond-wasm]
+version = "0.34.0"
+
+[dependencies.elrond-wasm-debug]
+version = "0.34.0"
